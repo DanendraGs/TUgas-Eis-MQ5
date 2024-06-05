@@ -1,0 +1,37 @@
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
+
+LiquidCrystal_I2C lcd(0x27, 16, 2); 
+const int ldrPin = A0;   
+const int buzzerPin = 2; 
+const int ledPin = 4;    
+
+void setup() {
+  lcd.begin(16, 2); 
+  lcd.backlight();  
+
+  pinMode(buzzerPin, OUTPUT); 
+  pinMode(ledPin, OUTPUT);      
+  noTone(buzzerPin);          
+  digitalWrite(ledPin, LOW); 
+}
+
+void loop() {
+  int ldrValue = analogRead(ldrPin);
+
+  lcd.clear();
+  lcd.setCursor(2, 0);
+  lcd.print("Tingkat Gas:");
+  lcd.setCursor(7, 1);
+  lcd.print(ldrValue);
+
+  if (ldrValue > 500) {
+    tone(buzzerPin, 1000); 
+    digitalWrite(ledPin, HIGH);
+  } else {
+    noTone(buzzerPin); 
+    digitalWrite(ledPin, LOW); 
+  }
+
+  delay(500); 
+}
